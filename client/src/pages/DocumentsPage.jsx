@@ -16,7 +16,7 @@ import { useAuth } from '../context/AuthContext';
 import { apiClient } from '../api/client';
 
 export const DocumentsPage = ({ onOpenDigiLocker }) => {
-  const { documents, refreshUserData, language } = useAuth();
+  const { documents, refreshUserData, language, t } = useAuth();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [newDocData, setNewDocData] = useState({
     docType: 'caste_certificate',
@@ -60,7 +60,7 @@ export const DocumentsPage = ({ onOpenDigiLocker }) => {
             <span className="text-xs text-purple-200">MeitY Certified Repository</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black mt-1">
-            {language === 'hi' ? 'दस्तावेज़ स्वास्थ्य व डिजिलॉकर वॉल्ट' : 'Document Health & DigiLocker Vault'}
+            {t('documentHealth')}
           </h1>
           <p className="text-xs sm:text-sm text-purple-200 mt-1 max-w-xl">
             Keep your certificates digitally synchronized to eliminate paper delays and automatically satisfy scheme criteria.

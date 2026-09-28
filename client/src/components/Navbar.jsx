@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { languageOptions } from '../data/i18n';
 import {
   ShieldCheck,
   Globe,
@@ -14,10 +15,12 @@ import {
   X,
   Sparkles,
   ChevronDown,
+  BookOpen,
+  Fingerprint,
 } from 'lucide-react';
 
 export const Navbar = ({ onOpenCscModal, onOpenDigiLockerModal }) => {
-  const { user, profile, language, changeLanguage } = useAuth();
+  const { user, profile, language, changeLanguage, t } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
@@ -46,6 +49,7 @@ export const Navbar = ({ onOpenCscModal, onOpenDigiLockerModal }) => {
     { to: '/ai-mitra',      labelEn: 'AI Mitra',      labelHi: 'जन सहायक',       icon: Mic        },
     { to: '/documents',     labelEn: 'Documents',     labelHi: 'दस्तावेज़',       icon: FolderSync },
     { to: '/applications',  labelEn: 'Applications',  labelHi: 'आवेदन',          icon: FileCheck2 },
+    { to: '/how-it-works',  labelEn: 'How It Works',  labelHi: 'कैसे काम करता है', icon: BookOpen },
   ];
 
   const moreLinks = [
@@ -63,9 +67,7 @@ export const Navbar = ({ onOpenCscModal, onOpenDigiLockerModal }) => {
         <div className="flex items-center gap-1.5 min-w-0 truncate">
           <span className="shrink-0 w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-purple-200 truncate">
-            {language === 'hi'
-              ? 'राष्ट्रीय नागरिक कल्याण व अधिकारिता गेटवे • भारत सरकार'
-              : 'National Citizen Welfare Gateway • Govt of India'}
+            {t('governmentGateway')}
           </span>
         </div>
         <div className="hidden sm:flex shrink-0 items-center gap-3 text-purple-200 whitespace-nowrap">
@@ -90,7 +92,7 @@ export const Navbar = ({ onOpenCscModal, onOpenDigiLockerModal }) => {
           {/* Brand */}
           <Link to="/" className="flex items-center gap-2 shrink-0">
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-[#2b0f4c] via-[#4d1e8d] to-[#6c28a8] flex items-center justify-center shadow-md shadow-purple-900/20">
-              <span className="font-bold text-lg sm:text-xl tracking-wider text-orange-400">H</span>
+              <Fingerprint className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" aria-label="HaqDwaar fingerprint identity" />
             </div>
             <div className="leading-tight">
               <div className="flex items-center gap-1.5">
@@ -104,26 +106,26 @@ export const Navbar = ({ onOpenCscModal, onOpenDigiLockerModal }) => {
           </Link>
 
           {/* Desktop Nav — shown from lg */}
-          <nav className="hidden lg:flex items-center gap-0.5">
+          <nav className="hidden lg:flex items-center gap-0.5 rounded-2xl bg-purple-50/70 border border-purple-100 p-1 whitespace-nowrap">
             {navLinks.map(({ to, labelEn, labelHi, icon: Icon }) => (
               <Link
                 key={to}
                 to={to}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
+                className={`flex items-center gap-1.5 px-2.5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition-all ${
                   isActive(to)
                     ? 'bg-[#2b0f4c] text-white shadow-sm'
                     : 'text-[#4a4458] hover:text-[#2b0f4c] hover:bg-purple-50'
                 }`}
               >
                 <Icon className={`w-4 h-4 ${isActive(to) ? 'text-orange-400' : 'text-purple-600'}`} />
-                <span>{language === 'hi' ? labelHi : labelEn}</span>
+                <span>{t(labelEn === 'How It Works' ? 'howItWorks' : labelEn === 'AI Mitra' ? 'aiMitra' : labelEn.toLowerCase())}</span>
               </Link>
             ))}
 
             {/* More dropdown */}
             <div className="relative group">
-              <button className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold text-[#4a4458] hover:text-[#2b0f4c] hover:bg-purple-50 transition">
-                <span>{language === 'hi' ? 'अन्य' : 'More'}</span>
+              <button className="flex items-center gap-1.5 px-2.5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap text-[#4a4458] hover:text-[#2b0f4c] hover:bg-white transition">
+                <span>{t('more')}</span>
                 <ChevronDown className="w-3.5 h-3.5" />
               </button>
               <div className="absolute right-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-purple-100 py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-150 z-50">
@@ -134,7 +136,7 @@ export const Navbar = ({ onOpenCscModal, onOpenDigiLockerModal }) => {
                     className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-900 transition"
                   >
                     <Icon className="w-3.5 h-3.5 text-purple-600" />
-                    {language === 'hi' ? labelHi : labelEn}
+                    {t(labelEn === 'Govt PDF Analysis' ? 'pdfAnalysis' : 'benefitFirewall')}
                   </Link>
                 ))}
                 <div className="border-t border-purple-100 my-1" />
@@ -144,7 +146,7 @@ export const Navbar = ({ onOpenCscModal, onOpenDigiLockerModal }) => {
                 >
                   <span className="flex items-center gap-2">
                     <Building2 className="w-3.5 h-3.5 text-purple-600" />
-                    {language === 'hi' ? 'CSC सहायता केंद्र' : 'CSC Centers'}
+                    {t('cscCenters')}
                   </span>
                   <span className="text-[10px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Nearby</span>
                 </button>
@@ -179,10 +181,7 @@ export const Navbar = ({ onOpenCscModal, onOpenDigiLockerModal }) => {
 
               {langDropdownOpen && (
                 <div className="absolute right-0 mt-1 w-40 bg-white rounded-xl shadow-xl border border-purple-200 py-1.5 z-50">
-                  {[
-                    { code: 'hi', label: 'हिन्दी (Hindi)' },
-                    { code: 'en', label: 'English' },
-                  ].map(({ code, label }) => (
+                  {languageOptions.map(({ code, label, englishLabel }) => (
                     <button
                       key={code}
                       onClick={() => { changeLanguage(code); setLangDropdownOpen(false); }}
@@ -190,12 +189,12 @@ export const Navbar = ({ onOpenCscModal, onOpenDigiLockerModal }) => {
                         language === code ? 'bg-purple-100 text-purple-900 font-bold' : 'hover:bg-purple-50 text-gray-700'
                       }`}
                     >
-                      {label}
+                      {label} <span className="text-[10px] text-gray-400">({englishLabel})</span>
                       {language === code && <span>✓</span>}
                     </button>
                   ))}
                   <div className="border-t border-purple-100 my-1" />
-                  <p className="px-3 py-1 text-[10px] text-gray-500">Bhojpuri, Maithili in Voice AI</p>
+                  <p className="px-3 py-1 text-[10px] text-gray-500">{t('languageHint')}</p>
                 </div>
               )}
             </div>
@@ -250,14 +249,14 @@ export const Navbar = ({ onOpenCscModal, onOpenDigiLockerModal }) => {
                 key={to}
                 to={to}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold border transition ${
+                className={`flex items-center gap-2 p-3 rounded-xl text-sm font-bold border transition ${
                   isActive(to)
                     ? 'bg-[#2b0f4c] text-white border-[#2b0f4c]'
                     : 'bg-purple-50/60 hover:bg-purple-100 text-[#2b0f4c] border-purple-100'
                 }`}
               >
                 <Icon className={`w-4 h-4 shrink-0 ${isActive(to) ? 'text-orange-400' : 'text-purple-700'}`} />
-                <span className="truncate">{language === 'hi' ? labelHi : labelEn}</span>
+                <span className="truncate">{t(labelEn === 'How It Works' ? 'howItWorks' : labelEn === 'AI Mitra' ? 'aiMitra' : labelEn === 'Govt PDF Analysis' ? 'pdfAnalysis' : labelEn === 'Benefit Firewall' ? 'benefitFirewall' : labelEn.toLowerCase())}</span>
               </Link>
             ))}
           </div>
@@ -269,14 +268,14 @@ export const Navbar = ({ onOpenCscModal, onOpenDigiLockerModal }) => {
               className="flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-900 transition"
             >
               <ShieldCheck className="w-4 h-4" />
-              Sync DigiLocker
+              {t('syncDigiLocker')}
             </button>
             <button
               onClick={() => { setMobileMenuOpen(false); onOpenCscModal?.(); }}
               className="flex items-center gap-1.5 text-xs font-bold text-purple-700 hover:text-purple-900 transition"
             >
               <Building2 className="w-4 h-4" />
-              {language === 'hi' ? 'CSC केंद्र' : 'CSC Kendra'}
+              {t('cscCenters')}
             </button>
           </div>
         </div>

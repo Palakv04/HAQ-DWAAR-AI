@@ -138,13 +138,13 @@ export const AiMitraPage = ({ onOpenActionPlan, onOpenDigiLocker }) => {
     <div className="max-w-4xl mx-auto space-y-6 pb-12">
       {/* Hero Voice Box */}
       <div className="bg-gradient-to-br from-[#230b42] via-[#2d0e53] to-[#1f093b] rounded-3xl p-6 sm:p-10 text-white shadow-haq-lg border border-purple-800/40 relative overflow-hidden flex flex-col items-center text-center space-y-5">
-        <div className="inline-flex items-center space-x-2 bg-white/10 border border-purple-400/30 px-3.5 py-1 rounded-full text-xs font-bold text-purple-200">
+        <div className="inline-flex items-center space-x-2 bg-white/10 border border-purple-400/30 px-3.5 py-1.5 rounded-full text-sm font-bold text-purple-200">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>AI MITRA • जन सहायक वॉइस (ACTIVE)</span>
         </div>
 
         <div className="flex items-center space-x-2 flex-wrap justify-center gap-y-1">
-          <span className="text-xs text-purple-300 font-semibold">Select Local Dialect:</span>
+          <span className="text-sm text-purple-300 font-semibold">Select Local Dialect:</span>
           {[
             { code: 'hi-IN', label: 'हिन्दी' },
             { code: 'hi-IN', label: 'भोजपुरी (Bhojpuri)' },
@@ -154,7 +154,7 @@ export const AiMitraPage = ({ onOpenActionPlan, onOpenDigiLocker }) => {
             <button
               key={i}
               onClick={() => setSelectedDialect(d.code)}
-              className={`text-xs px-3 py-1 rounded-full font-bold transition ${
+                className={`text-sm px-3 py-1.5 rounded-full font-bold transition ${
                 selectedDialect === d.code && i === 0
                   ? 'bg-orange-500 text-white shadow-xs'
                   : 'bg-white/10 hover:bg-white/20 text-purple-200'
@@ -180,7 +180,7 @@ export const AiMitraPage = ({ onOpenActionPlan, onOpenDigiLocker }) => {
             ) : (
               <Mic className="w-12 h-12 text-white" />
             )}
-            <span className="text-xs font-black tracking-wide uppercase mt-1">
+            <span className="text-sm font-black tracking-wide uppercase mt-1">
               {isListening ? 'सुन रहे हैं...' : 'बोलें'}
             </span>
           </button>
@@ -190,7 +190,7 @@ export const AiMitraPage = ({ onOpenActionPlan, onOpenDigiLocker }) => {
           <h1 className="text-2xl sm:text-3xl font-black text-white">
             "बोलकर अपनी समस्या बताएं"
           </h1>
-          <p className="text-xs sm:text-sm text-purple-300 mt-1">
+          <p className="text-sm sm:text-base text-purple-300 mt-1">
             Tap &amp; Speak in Local Dialect • Rural Voice Navigation
           </p>
         </div>
@@ -205,12 +205,12 @@ export const AiMitraPage = ({ onOpenActionPlan, onOpenDigiLocker }) => {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleExecuteQuery()}
               placeholder="या यहाँ टाइप करें: जैसे 'मेरे पास 1.5 एकड़ जमीन है और मुझे लोन चाहिए'..."
-              className="w-full bg-transparent px-3 py-2 text-xs sm:text-sm text-white placeholder-purple-300/70 focus:outline-none"
+              className="w-full bg-transparent px-3 py-2.5 text-sm sm:text-base text-white placeholder-purple-300/70 focus:outline-none"
             />
             <button
               onClick={() => handleExecuteQuery()}
               disabled={loading || !query.trim()}
-              className="bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-xs font-black px-5 py-2.5 rounded-xl transition flex items-center space-x-1.5 shrink-0 shadow-md"
+              className="bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-black px-5 py-2.5 rounded-xl transition flex items-center space-x-1.5 shrink-0 shadow-md"
             >
               <span>{loading ? 'विश्लेषण...' : 'खोजें (Ask AI)'}</span>
               <ArrowRight className="w-4 h-4" />
@@ -220,7 +220,7 @@ export const AiMitraPage = ({ onOpenActionPlan, onOpenDigiLocker }) => {
 
         {/* Sample Prompt Chips */}
         <div className="w-full max-w-2xl text-left space-y-2 pt-2">
-          <div className="text-xs font-bold text-purple-300">सुझाव (Tap any example):</div>
+          <div className="text-sm font-bold text-purple-300">सुझाव (Tap any example):</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {samplePrompts.map((p, idx) => (
               <button
@@ -229,7 +229,7 @@ export const AiMitraPage = ({ onOpenActionPlan, onOpenDigiLocker }) => {
                   setQuery(p);
                   handleExecuteQuery(p);
                 }}
-                className="text-left bg-white/5 hover:bg-white/15 border border-purple-500/20 rounded-xl p-2.5 text-xs text-purple-100 flex items-center justify-between transition group"
+                className="text-left bg-white/5 hover:bg-white/15 border border-purple-500/20 rounded-xl p-3 text-sm text-purple-100 flex items-center justify-between transition group"
               >
                 <span className="leading-snug">💡 "{p}"</span>
                 <ArrowRight className="w-3.5 h-3.5 text-purple-400 group-hover:text-orange-400 shrink-0 ml-1" />

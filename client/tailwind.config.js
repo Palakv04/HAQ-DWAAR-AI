@@ -21,14 +21,16 @@ export default {
           950: '#230340',
         },
         haq: {
-          purple: '#2b0f4c',
-          dark: '#1e0b36',
-          surface: '#f9f6fd',
-          border: '#e8def8',
-          accent: '#ff6b35',
-          green: '#10b981',
+          purple: '#240b49',
+          dark: '#1e0a3c',
+          surface: '#fbf9fe',
+          border: '#e9e1f5',
+          accent: '#ea580c',
+          green: '#059669',
           gold: '#f59e0b',
-          blue: '#2563eb'
+          blue: '#2563eb',
+          vermilion: '#c2410c',
+          slate: '#0f172a',
         }
       },
       fontFamily: {

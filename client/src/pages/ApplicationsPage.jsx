@@ -11,9 +11,36 @@ import {
 } from 'lucide-react';
 import { apiClient } from '../api/client';
 import { useAuth } from '../context/AuthContext';
+import { demoApplicationKey } from '../data/demoData';
+
+const demoApplicationSteps = [
+  { stepNumber: 1, title: 'Citizen Passport Verification', titleHi: 'नागरिक प्रोफाइल सत्यापन', status: 'completed' },
+  { stepNumber: 2, title: 'Document Clearance in DigiLocker', titleHi: 'दस्तावेज़ पूर्णता जांच', status: 'in_progress' },
+  { stepNumber: 3, title: 'Institutional / Department Endorsement', titleHi: 'संस्थान / ब्लॉक सत्यापन', status: 'pending' },
+  { stepNumber: 4, title: 'Welfare Sanction Order', titleHi: 'कल्याणकारी स्वीकृति आदेश', status: 'pending' },
+  { stepNumber: 5, title: 'Direct Benefit Transfer (DBT)', titleHi: 'डीबीटी बैंक अंतरण', status: 'pending' },
+];
+
+const readLocalApplication = () => {
+  const stored = localStorage.getItem(demoApplicationKey);
+  if (!stored) return null;
+
+  try {
+    const application = JSON.parse(stored);
+    return {
+      ...application,
+      steps: Array.isArray(application.steps) && application.steps.length
+        ? application.steps
+        : demoApplicationSteps,
+    };
+  } catch {
+    localStorage.removeItem(demoApplicationKey);
+    return null;
+  }
+};
 
 export const ApplicationsPage = () => {
-  const { language } = useAuth();
+  const { language, t } = useAuth();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,10 +53,15 @@ export const ApplicationsPage = () => {
       setLoading(true);
       const res = await apiClient('/applications');
       if (res.success) {
-        setApplications(res.applications);
+        const localApplication = readLocalApplication();
+        setApplications(res.applications.length ? res.applications : localApplication ? [localApplication] : []);
       }
     } catch (err) {
       console.error('Error fetching applications:', err);
+      const localApplication = readLocalApplication();
+      if (localApplication) {
+        setApplications([localApplication]);
+      }
     } finally {
       setLoading(false);
     }
@@ -58,6 +90,16 @@ export const ApplicationsPage = () => {
       }
     } catch (err) {
       console.error('Error advancing application step:', err);
+      const localApplication = readLocalApplication();
+      if (localApplication) {
+        const updatedSteps = localApplication.steps.map((step) => ({
+          ...step,
+          status: step.stepNumber < nextStep ? 'completed' : step.stepNumber === nextStep ? 'in_progress' : 'pending',
+        }));
+        const updated = { ...localApplication, currentStep: nextStep, status: statusMap[nextStep], steps: updatedSteps };
+        localStorage.setItem(demoApplicationKey, JSON.stringify(updated));
+        setApplications([updated]);
+      }
     }
   };
 
@@ -73,7 +115,7 @@ export const ApplicationsPage = () => {
             <span className="text-xs text-purple-200">Real-Time State Welfare Sync</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black mt-1">
-            {language === 'hi' ? 'मेरे आवेदन (My Applications)' : 'My Applications'}
+            {t('myApplications')}
           </h1>
           <p className="text-xs sm:text-sm text-purple-200 mt-1 max-w-xl">
             Track statutory progression from citizen profile verification to final Direct Benefit Transfer (DBT) credit.

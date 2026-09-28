@@ -15,7 +15,7 @@ import { useAuth } from '../context/AuthContext';
 import { SchemeCard } from '../components/SchemeCard';
 
 export const SchemesPage = ({ onOpenActionPlan, onOpenDigiLocker }) => {
-  const { language, activeMode, changeMode } = useAuth();
+  const { language, activeMode, changeMode, t } = useAuth();
   const [schemes, setSchemes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('all');
@@ -66,7 +66,7 @@ export const SchemesPage = ({ onOpenActionPlan, onOpenDigiLocker }) => {
             <span className="text-xs text-purple-200">Zero Fake Schemes Guaranteed</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black mt-1">
-            {language === 'hi' ? 'सरकारी योजना निर्देशिका' : 'Government Welfare Schemes'}
+            {t('welfareSchemes')}
           </h1>
           <p className="text-xs sm:text-sm text-purple-200 mt-1 max-w-xl">
             Every scheme below contains verified eligibility rules, required document checklists, and direct links to official state and central portals.

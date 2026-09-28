@@ -12,10 +12,9 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { apiClient } from '../api/client';
 
 export const PassportPage = () => {
-  const { profile, readiness, refreshUserData, language } = useAuth();
+  const { profile, readiness, saveProfile, language, t } = useAuth();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -122,13 +121,9 @@ export const PassportPage = () => {
     e.preventDefault();
     try {
       setSaving(true);
-      const res = await apiClient('/profile', {
-        method: 'PUT',
-        body: formData,
-      });
+      const res = await saveProfile(formData);
       if (res.success) {
         setSaveSuccess(true);
-        await refreshUserData();
         setTimeout(() => setSaveSuccess(false), 3000);
       }
     } catch (err) {
@@ -150,7 +145,7 @@ export const PassportPage = () => {
             <span className="text-xs text-purple-200">Aadhaar e-KYC Verified</span>
           </div>
           <h1 className="text-2xl font-black mt-1">
-            {language === 'hi' ? 'नागरिक अधिकार पासपोर्ट (Benefit Passport)' : 'Citizen Benefit Passport'}
+            {t('benefitPassport')}
           </h1>
           <p className="text-xs text-purple-200 mt-1 max-w-xl">
             This structured profile feeds the deterministic eligibility engine. Keep it updated to unlock maximum state &amp; central benefits.

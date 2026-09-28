@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
 import { BottomNav } from './components/BottomNav';
@@ -13,13 +13,16 @@ import { DocumentsPage } from './pages/DocumentsPage';
 import { ApplicationsPage } from './pages/ApplicationsPage';
 import { NotificationAnalysisPage } from './pages/NotificationAnalysisPage';
 import { ClaimVerificationPage } from './pages/ClaimVerificationPage';
+import { HowItWorksPage } from './pages/HowItWorksPage';
 
 import { AiMitraVoiceModal } from './components/AiMitraVoiceModal';
 import { DigiLockerSyncModal } from './components/DigiLockerSyncModal';
 import { ActionPlanModal } from './components/ActionPlanModal';
 import { CscKendraModal } from './components/CscKendraModal';
+import { DemoJourney } from './components/DemoJourney';
 
 export function AppContent() {
+  const navigate = useNavigate();
   const [voiceModalOpen, setVoiceModalOpen] = useState(false);
   const [voiceModalQuery, setVoiceModalQuery] = useState('');
 
@@ -47,7 +50,7 @@ export function AppContent() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f7f5fa] text-[#1e1b2e] selection:bg-purple-200 selection:text-purple-900">
+    <div className="min-h-screen flex flex-col bg-[#f7f5fa] text-[#0f172a] selection:bg-purple-200 selection:text-purple-900">
       {/* Top Navbar */}
       <Navbar
         onOpenCscModal={() => setCscModalOpen(true)}
@@ -66,9 +69,19 @@ export function AppContent() {
                 onOpenActionPlan={handleOpenActionPlan}
                 onOpenDigiLocker={handleOpenDigiLocker}
                 onOpenCscModal={() => setCscModalOpen(true)}
+                demoJourney={
+                  <DemoJourney
+                    onOpenVoiceModal={handleOpenVoice}
+                    onOpenActionPlan={handleOpenActionPlan}
+                    onOpenDigiLocker={handleOpenDigiLocker}
+                    onOpenPassport={() => navigate('/passport')}
+                    onOpenApplications={() => navigate('/applications')}
+                  />
+                }
               />
             }
           />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/passport" element={<PassportPage />} />
           <Route
             path="/schemes"

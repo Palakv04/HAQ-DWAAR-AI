@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 
 export const BottomNav = ({ onOpenVoiceModal }) => {
   const location = useLocation();
-  const { language } = useAuth();
+  const { t } = useAuth();
 
   const isCurrent = (path) => location.pathname === path;
 
@@ -21,7 +21,7 @@ export const BottomNav = ({ onOpenVoiceModal }) => {
         >
           <Home className={`w-5 h-5 ${isCurrent('/') ? 'text-[#2b0f4c] stroke-[2.5]' : ''}`} />
           <span className="text-[10px] mt-0.5 font-medium leading-none">
-            {language === 'hi' ? 'मुख्य पृष्ठ' : 'Home'}
+            {t('home')}
           </span>
         </Link>
 
@@ -34,7 +34,7 @@ export const BottomNav = ({ onOpenVoiceModal }) => {
         >
           <Landmark className={`w-5 h-5 ${isCurrent('/schemes') ? 'text-[#2b0f4c] stroke-[2.5]' : ''}`} />
           <span className="text-[10px] mt-0.5 font-medium leading-none">
-            {language === 'hi' ? 'योजनाएं' : 'Schemes'}
+            {t('schemes')}
           </span>
         </Link>
 
@@ -48,7 +48,7 @@ export const BottomNav = ({ onOpenVoiceModal }) => {
             <Mic className="w-7 h-7" />
           </button>
           <span className="text-[10px] font-extrabold text-[#ea580c] mt-0.5 leading-none">
-            {language === 'hi' ? 'बोलें' : 'Voice AI'}
+            {t('voiceAi')}
           </span>
         </div>
 
@@ -61,7 +61,7 @@ export const BottomNav = ({ onOpenVoiceModal }) => {
         >
           <FolderSync className={`w-5 h-5 ${isCurrent('/documents') ? 'text-[#2b0f4c] stroke-[2.5]' : ''}`} />
           <span className="text-[10px] mt-0.5 font-medium leading-none">
-            {language === 'hi' ? 'दस्तावेज़' : 'Documents'}
+            {t('documents')}
           </span>
         </Link>
 
@@ -74,7 +74,7 @@ export const BottomNav = ({ onOpenVoiceModal }) => {
         >
           <User className={`w-5 h-5 ${isCurrent('/passport') ? 'text-[#2b0f4c] stroke-[2.5]' : ''}`} />
           <span className="text-[10px] mt-0.5 font-medium leading-none">
-            {language === 'hi' ? 'प्रोफ़ाइल' : 'Profile'}
+            {t('profile')}
           </span>
         </Link>
       </div>

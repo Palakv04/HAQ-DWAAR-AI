@@ -14,7 +14,7 @@ import { apiClient } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 
 export const NotificationAnalysisPage = () => {
-  const { language, profile } = useAuth();
+  const { language, profile, t } = useAuth();
   const [samples, setSamples] = useState([]);
   const [selectedSample, setSelectedSample] = useState(null);
   const [customText, setCustomText] = useState('');
@@ -84,7 +84,7 @@ export const NotificationAnalysisPage = () => {
             <span className="text-xs text-purple-200">Fact-Checked Extraction</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black mt-1">
-            {language === 'hi' ? 'सरकारी परिपत्र व PDF विश्लेषण' : 'Government Notification PDF Analysis'}
+            {t('notificationAnalysis')}
           </h1>
           <p className="text-xs sm:text-sm text-purple-200 mt-1 max-w-xl">
             Upload complex 20-page gazette orders or pick a sample to discover how policies directly impact your Benefit Passport.
