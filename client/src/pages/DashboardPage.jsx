@@ -27,12 +27,15 @@ import { apiClient } from '../api/client';
 import { BenefitReadinessGauge } from '../components/BenefitReadinessGauge';
 import { SchemeCard } from '../components/SchemeCard';
 import { speakText } from '../utils/speech';
+import { demoSchemes } from '../data/demoData';
+import { HeroCarousel } from '../components/HeroCarousel';
 
 export const DashboardPage = ({
   onOpenVoiceModal,
   onOpenActionPlan,
   onOpenDigiLocker,
   onOpenCscModal,
+  demoJourney,
 }) => {
   const { user, profile, readiness, documents, language, activeMode, changeMode } = useAuth();
   const navigate = useNavigate();
@@ -55,6 +58,7 @@ export const DashboardPage = ({
       }
     } catch (err) {
       console.error('Failed to load schemes:', err);
+      setSchemes(demoSchemes);
     } finally {
       setLoadingSchemes(false);
     }
@@ -248,6 +252,14 @@ export const DashboardPage = ({
         </div>
       </section>
 
+      <HeroCarousel
+        onOpenVoice={onOpenVoiceModal}
+        onOpenDigiLocker={onOpenDigiLocker}
+        onOpenPassport={() => navigate('/passport')}
+      />
+
+      {demoJourney}
+
       {/* ========================================================
           2. HERO AI MITRA VOICE CARD (DESKTOP & MOBILE)
          ======================================================== */}
@@ -257,12 +269,12 @@ export const DashboardPage = ({
 
         <div className="relative z-10 flex flex-col items-center text-center space-y-4 max-w-3xl mx-auto">
           {/* Top Pill */}
-          <div className="inline-flex items-center space-x-2 bg-white/10 border border-purple-400/30 px-3 py-1 rounded-full text-xs font-bold text-purple-200">
+          <div className="inline-flex items-center space-x-2 bg-white/10 border border-purple-400/30 px-3 py-1.5 rounded-full text-sm font-bold text-purple-200">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>AI MITRA • जन सहायक वॉइस (ONLINE)</span>
           </div>
 
-          <p className="text-xs text-purple-300 font-medium">
+          <p className="text-sm text-purple-300 font-medium">
             Bilingual &amp; Dialect Aware (Hindi, Bhojpuri, Maithili, Magahi, English)
           </p>
 
@@ -279,10 +291,10 @@ export const DashboardPage = ({
           </div>
 
           <div className="space-y-1">
-            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               "बोलकर अपनी समस्या या जरूरत बताएं"
             </h2>
-            <p className="text-xs text-purple-300">
+            <p className="text-sm text-purple-300">
               Click the mic &amp; ask anything in Hindi or regional dialects. No typing needed.
             </p>
           </div>
@@ -301,7 +313,7 @@ export const DashboardPage = ({
                   }
                 }}
                 placeholder="या यहाँ लिखें: जैसे 'मुझे खाद सब्सिडी या बेटी की छात्रवृत्ति चाहिए'..."
-                className="w-full bg-transparent px-3 py-2 text-xs sm:text-sm text-white placeholder-purple-300/70 focus:outline-none"
+                className="w-full bg-transparent px-3 py-2.5 text-sm sm:text-base text-white placeholder-purple-300/70 focus:outline-none"
               />
               <button
                 onClick={() => {
@@ -311,7 +323,7 @@ export const DashboardPage = ({
                     onOpenVoiceModal?.();
                   }
                 }}
-                className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-black px-4 py-2.5 rounded-xl transition flex items-center space-x-1.5 shrink-0 shadow-md"
+                className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-black px-4 py-2.5 rounded-xl transition flex items-center space-x-1.5 shrink-0 shadow-md"
               >
                 <span>खोजें (Ask AI)</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -320,7 +332,7 @@ export const DashboardPage = ({
           </div>
 
           {/* Sample Prompts */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs">
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-sm">
             {[
               'मेरी बेटी की कॉलेज फीस में मदद चाहिए?',
               'किसान सम्मान निधि का अगला किस्त कब आएगा?',
@@ -329,7 +341,7 @@ export const DashboardPage = ({
               <button
                 key={idx}
                 onClick={() => onOpenVoiceModal?.(p)}
-                className="bg-white/5 hover:bg-white/15 border border-purple-400/20 text-purple-100 rounded-xl px-3 py-1.5 text-[11px] font-semibold flex items-center space-x-1.5 transition"
+                className="bg-white/5 hover:bg-white/15 border border-purple-400/20 text-purple-100 rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold flex items-center space-x-1.5 transition"
               >
                 <span>💡 "{p}"</span>
                 <ArrowRight className="w-3 h-3 text-orange-400" />
@@ -346,8 +358,8 @@ export const DashboardPage = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <span className="text-lg">🌿</span>
-            <h2 className="text-base sm:text-lg font-black text-[#2b0f4c]">
-              त्वरित श्रेणियां <span className="text-xs font-semibold text-gray-500">(Life-Situation Sectors)</span>
+            <h2 className="text-lg sm:text-xl font-black text-[#2b0f4c]">
+              त्वरित श्रेणियां <span className="text-sm font-semibold text-gray-500">(Life-Situation Sectors)</span>
             </h2>
           </div>
           <Link
@@ -370,29 +382,29 @@ export const DashboardPage = ({
                   handleModeClick(cat.mode);
                   setSelectedFilter(cat.id);
                 }}
-                className={`text-left p-4 rounded-2xl border transition-all duration-200 relative overflow-hidden group ${
+                className={`text-left p-5 rounded-2xl border transition-all duration-200 relative overflow-hidden group ${
                   isCurrentMode
                     ? 'border-purple-600 bg-purple-50/90 shadow-md ring-1 ring-purple-400'
                     : 'border-purple-100 bg-white hover:border-purple-300 hover:shadow-xs'
                 }`}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-100 text-xl flex items-center justify-center group-hover:scale-110 transition">
+                  <div className="w-12 h-12 rounded-xl bg-purple-100 text-2xl flex items-center justify-center group-hover:scale-110 transition">
                     {cat.icon}
                   </div>
-                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${cat.badgeColor}`}>
+                  <span className={`text-xs font-extrabold px-2 py-0.5 rounded-full ${cat.badgeColor}`}>
                     {cat.badge}
                   </span>
                 </div>
 
-                <div className="text-xs font-black text-[#2b0f4c] leading-tight group-hover:text-purple-900">
+                <div className="text-sm sm:text-base font-black text-[#2b0f4c] leading-tight group-hover:text-purple-900">
                   {language === 'hi' ? cat.labelHi : cat.labelEn}
                 </div>
-                <div className="text-[11px] text-gray-500 font-medium mt-0.5">
+                <div className="text-xs sm:text-sm text-gray-500 font-medium mt-1">
                   {cat.labelEn.split('&')[0]}
                 </div>
 
-                <div className="mt-2 text-[10px] font-bold text-purple-700 flex items-center justify-between border-t border-purple-100/70 pt-2">
+                <div className="mt-3 text-xs font-bold text-purple-700 flex items-center justify-between border-t border-purple-100/70 pt-2">
                   <span>{cat.count}</span>
                   <ChevronRight className="w-3 h-3 text-purple-400 group-hover:translate-x-0.5 transition" />
                 </div>

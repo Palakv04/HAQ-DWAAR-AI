@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { apiClient } from '../api/client';
+import { demoDocuments, demoProfile, demoReadiness, demoUser } from '../data/demoData';
+import { translate } from '../data/i18n';
 
 const AuthContext = createContext();
 
@@ -44,7 +46,21 @@ export const AuthProvider = ({ children }) => {
         await fetchProfileAndDocs();
       }
     } catch (err) {
-      console.error('Demo login error:', err);
+      console.warn('Using local demo citizen because the API is unavailable:', err.message);
+      localStorage.setItem('haqdwaar_demo_mode', 'true');
+      const savedProfile = localStorage.getItem('haqdwaar_demo_profile');
+      let localProfile = demoProfile;
+      if (savedProfile) {
+        try {
+          localProfile = { ...demoProfile, ...JSON.parse(savedProfile) };
+        } catch {
+          localStorage.removeItem('haqdwaar_demo_profile');
+        }
+      }
+      setUser(demoUser);
+      setProfile(localProfile);
+      setDocuments(demoDocuments);
+      setReadiness(demoReadiness);
     } finally {
       setLoading(false);
     }
@@ -79,6 +95,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('haqdwaar_lang', lang);
   };
 
+  const t = (key) => translate(language, key);
+
   const changeMode = async (mode) => {
     setActiveMode(mode);
     try {
@@ -95,7 +113,54 @@ export const AuthProvider = ({ children }) => {
   };
 
   const refreshUserData = async () => {
+    if (localStorage.getItem('haqdwaar_demo_mode') === 'true') {
+      const savedProfile = localStorage.getItem('haqdwaar_demo_profile');
+      let localProfile = demoProfile;
+      if (savedProfile) {
+        try {
+          localProfile = { ...demoProfile, ...JSON.parse(savedProfile) };
+        } catch {
+          localStorage.removeItem('haqdwaar_demo_profile');
+        }
+      }
+      setProfile(localProfile);
+      setDocuments((current) => current.length ? current : demoDocuments);
+      setReadiness((current) => current || demoReadiness);
+      return;
+    }
     await fetchProfileAndDocs();
+  };
+
+  const saveProfile = async (updates) => {
+    if (localStorage.getItem('haqdwaar_demo_mode') === 'true') {
+      const savedProfile = localStorage.getItem('haqdwaar_demo_profile');
+      let currentProfile = demoProfile;
+      if (savedProfile) {
+        try {
+          currentProfile = { ...demoProfile, ...JSON.parse(savedProfile) };
+        } catch {
+          localStorage.removeItem('haqdwaar_demo_profile');
+        }
+      }
+
+      const nextProfile = {
+        ...currentProfile,
+        ...updates,
+        studentDetails: { ...currentProfile.studentDetails, ...updates.studentDetails },
+        farmerDetails: { ...currentProfile.farmerDetails, ...updates.farmerDetails },
+        familyDetails: { ...currentProfile.familyDetails, ...updates.familyDetails },
+      };
+      localStorage.setItem('haqdwaar_demo_profile', JSON.stringify(nextProfile));
+      setProfile(nextProfile);
+      return { success: true, profile: nextProfile, readiness: readiness || demoReadiness };
+    }
+
+    const response = await apiClient('/profile', { method: 'PUT', body: updates });
+    if (response.success) {
+      setProfile(response.profile);
+      setReadiness(response.readiness || readiness);
+    }
+    return response;
   };
 
   return (
@@ -106,11 +171,13 @@ export const AuthProvider = ({ children }) => {
         readiness,
         documents,
         language,
+        t,
         loading,
         activeMode,
         changeLanguage,
         changeMode,
         refreshUserData,
+        saveProfile,
         loginDemoUser,
       }}
     >
